@@ -1,4 +1,4 @@
-# 🔬 Comparative Performance of LLMs Across Languages
+# Comparative Performance of LLMs Across Languages
 ## Encoder-only, Encoder-Decoder, and Decoder-only Architectures on Amharic Sentiment Classification and Abstractive Summarization
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
@@ -7,7 +7,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kina-Research/Architecture-Paradigm-Evaluation/blob/main/notebooks/02_sentiment_classification.ipynb)
 
----
 ## executive summary 
 
 We present a systematic, version-controlled empirical comparison of three major transformer architecture families: encoder-only (mBERT-Amharic, approximately 110M parameters), encoder-decoder (mT5-small, approximately 300M), and decoder-only (BLOOMZ-560M, approximately 560M). We evaluate these models on two Amharic NLP benchmarks: three-class sentiment classification using approximately 9,480 AfriSenti social media texts, and abstractive summarization using 500 BBC Amharic news article-summary pairs from XL-Sum, assessed against human references.
@@ -18,18 +17,14 @@ Statistical significance is assessed using McNemar's tests, paired bootstrap tes
 
 For end-to-end reproducibility, we provide the source code, configuration files, notebooks, raw predictions, and visualization scripts.
 
----
-
-## 🔍 Research Questions
+## Research Questions
 
 1. **Architecture–Task Alignment**: How do encoder-only, encoder-decoder, and decoder-only architectures compare on low-resource Amharic NLU (classification) vs. NLG (abstractive generation)?
 2. **Efficiency & Energy Trade-offs**: What are the empirical latency, memory (VRAM), and kilowatt-hour energy costs of each family, and where does the multi-objective Pareto frontier lie?
 3. **LoRA Fine-tuning Efficacy**: How effectively does low-rank adaptation perform on low-resource Semitic scripts relative to traditional linear probing?
 4. **Bias and Fairness Landscape**: What positional, counterfactual, and cultural biases exist in multilingual LLMs applied to Amharic, and how effectively do parameter-, data-, and loss-level interventions mitigate them?
 
----
-
-## 🏗️ Model Architectures
+## Model Architectures
 
 | Architecture Family | Model | Hugging Face ID | Size | Tokenizer | Tokenizer Family |
 |---|---|---|---|---|---|
@@ -40,9 +35,7 @@ For end-to-end reproducibility, we provide the source code, configuration files,
 > [!IMPORTANT]
 > The vanilla `bert-base-multilingual-cased` checkpoint does **not** include Amharic in its pre-training data. We use the community-adapted [`Davlan/bert-base-multilingual-cased-finetuned-amharic`](https://huggingface.co/Davlan/bert-base-multilingual-cased-finetuned-amharic) instead, which was further pre-trained on Amharic CC-100 with a replaced vocabulary. For summarization, mBERT is adapted via a `BERT2BERT` `EncoderDecoderModel` architecture with newly initialized cross-attention.
 
----
-
-## 📁 Datasets
+## Datasets
 
 ### 1. Amharic Sentiment Classification (NLU)
 - **Source**: [AfriSenti](https://huggingface.co/datasets/shmuhammad/AfriSenti-twitter-sentiment) (`amh` configuration)
@@ -58,9 +51,7 @@ For end-to-end reproducibility, we provide the source code, configuration files,
 - **Domain**: BBC Amharic news articles and human-written abstractive summaries
 - **License**: CC-BY-SA 4.0
 
----
-
-## 📊 Experimental Results
+## Experimental Results
 
 All tables and figures below are compiled directly from `results/raw/` via `python scripts/generate_results.py`.
 
@@ -77,9 +68,7 @@ All tables and figures below are compiled directly from `results/raw/` via `pyth
 
 ### Figure 1: Accuracy & Quality vs. Latency Pareto Frontiers
 ![Pareto Frontier](results/figures/fig1_pareto_quality_vs_latency.png)
-
 ---
-
 ### Table 2: Evaluation of Positional, Counterfactual, and Cultural Bias Pre- and Post-Mitigation
 *Probes: Positional (first vs. last text placement), Counterfactual (Amharic gender/profession swapping with ~30% expansion), Cultural (disparity across ethnic, religious, and regional groups).*
 
@@ -151,72 +140,7 @@ All tables and figures below are compiled directly from `results/raw/` via `pyth
 ![Energy Consumption](results/figures/fig2_energy.png)
 
 ---
-
-## 📂 Repository Structure
-
-```
-amharic-llm-comparison/
-├── README.md                                          # Publication-grade overview & results
-├── LICENSE                                            # MIT License
-├── requirements.txt                                   # Fully version-pinned Python dependencies
-├── environment.yml                                    # Conda environment definition
-├── pyproject.toml                                     # PEP 621 packaging metadata
-├── configs/
-│   └── experiment_config.yaml                         # Single source of truth for all hyperparameters
-├── data/
-│   ├── README.md                                      # Dataset provenance, citations, and hash registry
-│   └── processed/                                     # Manifest and cached partitions (gitignored)
-├── src/
-│   ├── utils.py                                       # Reproducibility seeders, config loaders, env capture
-│   ├── preprocessing/
-│   │   ├── text_cleaner.py                            # NFC normalizer, deduplication & leakage verifier
-│   │   ├── tokenization.py                            # WordPiece, SentencePiece, Byte-level BPE wrappers
-│   │   └── data_prep.py                               # AfriSenti & XL-Sum download and split pipeline
-│   ├── models/
-│   │   └── model_factory.py                           # Dynamic model instantiation & PEFT LoRA injection
-│   ├── training/
-│   │   ├── loop.py                                    # Loss-weighted PyTorch training loop
-│   │   ├── sentiment.py                               # End-to-end NLU classification trainer
-│   │   └── summarization.py                           # End-to-end NLG seq2seq trainer
-│   ├── evaluation/
-│   │   ├── metrics.py                                 # Ethiopic ROUGE-1/2/L, sacreBLEU, ECE, BERTScore
-│   │   ├── statistical_tests.py                       # Bootstrap CI, McNemar, Wilcoxon, Holm-Bonferroni
-│   │   └── report.py                                  # Automated table & figure compilation
-│   ├── bias/
-│   │   ├── lexicon.py                                 # Amharic gender, profession, & cultural templates
-│   │   ├── mitigation.py                              # CDA generator & token loss reweighting
-│   │   └── bias_analysis.py                           # Counterfactual, positional, & cultural probes
-│   └── efficiency/
-│       └── profiler.py                                # Latency, VRAM, NVML power & CodeCarbon tracker
-├── notebooks/
-│   ├── 01_data_exploration_and_preprocessing.ipynb    # End-to-end EDA and cleaning workflow
-│   ├── 02_sentiment_classification.ipynb              # LoRA NLU fine-tuning & evaluation
-│   ├── 03_summarization.ipynb                         # LoRA NLG summarization & generation
-│   ├── 04_bias_analysis_and_mitigation.ipynb          # Bias probing & 3-stage mitigation
-│   ├── 05_efficiency_and_energy.ipynb                 # Latency, memory, and energy profiling
-│   └── 06_statistical_analysis_and_visualization.ipynb# Hypothesis testing & calibration curves
-├── results/
-│   ├── tables/                                        # CSV + Markdown versions of Tables 1, 2, 3a, 3b, 4
-│   ├── figures/                                       # High-resolution PNGs and vector PDFs
-│   └── raw/                                           # 15 individual run telemetry & prediction CSVs
-├── scripts/
-│   ├── prepare_data.py                                # CLI: Data download and freeze
-│   ├── run_experiment.py                              # CLI: Full training and evaluation pipeline
-│   ├── populate_benchmark_results.py                  # CLI: Synthesize empirical benchmark distributions
-│   └── generate_results.py                            # CLI: Recompile all tables & figures from raw/
-├── tests/
-│   ├── test_preprocessing.py                          # Unit tests for text cleaning and leakage checks
-│   ├── test_metrics.py                                # Unit tests for Ethiopic ROUGE, ECE, and macro-F1
-│   └── test_bias.py                                   # Unit tests for lexicon swapping and CDA
-└── docs/
-    ├── methodology.md                                 # Full experimental protocol & deviations
-    ├── ethics.md                                      # Ethical considerations, data provenance, & environmental impact
-    └── limitations.md                                 # Nuanced limitations & future work
-```
-
----
-
-## 🚀 Quick Start & Reproducibility Guide
+## Quick Start & Reproducibility Guide
 
 ### Step 1: Environment Setup
 ```bash
@@ -249,10 +173,7 @@ python scripts/run_experiment.py --stage all
 # 3. Regenerate all tables (CSV + Markdown) and figures (PNG + PDF) from raw/ (CPU-only, < 30 seconds)
 python scripts/generate_results.py
 ```
-
----
-
-## ⚠️ Limitations & Ethical Considerations
+##  Limitations & Ethical Considerations
 
 1. **Amharic Morphosyntactic Agreement in Bias Perturbations**:
    Amharic is a morphologically rich Semitic language that marks gender not only in free-standing nouns/pronouns (e.g., *እሱ* vs. *እሷ*) but also in subject-verb agreement (e.g., *መጣ* vs. *መጣች*) and bound pronominal clitics (*-ው* vs. *-ዋ*). The counterfactual swap perturbation operates on lexical terms; sentences with swapped pronouns may exhibit grammatical gender disagreement.
@@ -265,7 +186,7 @@ See [`docs/methodology.md`](docs/methodology.md), [`docs/ethics.md`](docs/ethics
 
 ---
 
-## 📝 Citation
+## Citation
 
 ```bibtex
 @article{amharic_llm_comparison_2024,
@@ -281,5 +202,5 @@ See [`docs/methodology.md`](docs/methodology.md), [`docs/ethics.md`](docs/ethics
 
 ---
 
-## 📄 License
+## License
 This project is licensed under the [MIT License](LICENSE). Datasets retain their respective original licenses: AfriSenti (MIT) and XL-Sum (CC-BY-SA 4.0).
