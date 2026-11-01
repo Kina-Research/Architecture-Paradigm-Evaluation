@@ -182,25 +182,6 @@ python scripts/generate_results.py
 3. **Hardware & Energy Modeling**:
    GPU energy is measured directly at the board level via NVML 100ms hardware polling; system-level CPU and memory draw are modeled via CodeCarbon. Data center cooling and PUE overhead (typically 1.1–1.5×) are excluded from the reported figures.
 
-See [`docs/methodology.md`](docs/methodology.md), [`docs/ethics.md`](docs/ethics.md), and [`docs/limitations.md`](docs/limitations.md) for detailed treatments.
-
 ---
-
-## Citation
-
-```bibtex
-@article{amharic_llm_comparison_2024,
-  title   = {Comparative Performance of {LLMs} Across Languages: Encoder-only,
-             Encoder-Decoder, and Decoder-only Architectures on {Amharic}
-             Sentiment Classification and Abstractive Summarization},
-  author  = {Amharic LLM Research Team},
-  journal = {arXiv preprint},
-  year    = {2024},
-  url     = {https://github.com/Kina-Research/Architecture-Paradigm-Evaluation}
-}
-```
-
----
-
 ## License
 This project is licensed under the [MIT License](LICENSE). Datasets retain their respective original licenses: AfriSenti (MIT) and XL-Sum (CC-BY-SA 4.0).
