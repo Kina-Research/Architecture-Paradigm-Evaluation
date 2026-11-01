@@ -140,7 +140,7 @@ All tables and figures below are compiled directly from `results/raw/` via `pyth
 ![Energy Consumption](results/figures/fig2_energy.png)
 
 ---
-## Quick Start & Reproducibility Guide
+## Reproducibility Guide
 
 ### Step 1: Environment Setup
 ```bash
@@ -182,6 +182,3 @@ python scripts/generate_results.py
 3. **Hardware & Energy Modeling**:
    GPU energy is measured directly at the board level via NVML 100ms hardware polling; system-level CPU and memory draw are modeled via CodeCarbon. Data center cooling and PUE overhead (typically 1.1–1.5×) are excluded from the reported figures.
 
----
-## License
-This project is licensed under the [MIT License](LICENSE). Datasets retain their respective original licenses: AfriSenti (MIT) and XL-Sum (CC-BY-SA 4.0).
