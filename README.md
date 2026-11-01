@@ -8,12 +8,15 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Kina-Research/Architecture-Paradigm-Evaluation/blob/main/notebooks/02_sentiment_classification.ipynb)
 
 ---
+## executive summary 
 
-## Abstract
+We present a systematic, version-controlled empirical comparison of three major transformer architecture families: encoder-only (mBERT-Amharic, approximately 110M parameters), encoder-decoder (mT5-small, approximately 300M), and decoder-only (BLOOMZ-560M, approximately 560M). We evaluate these models on two Amharic NLP benchmarks: three-class sentiment classification using approximately 9,480 AfriSenti social media texts, and abstractive summarization using 500 BBC Amharic news article-summary pairs from XL-Sum, assessed against human references.
 
-We present a systematic, version-controlled empirical comparison of three major transformer architecture families — **encoder-only** (mBERT-Amharic, ~110M), **encoder-decoder** (mT5-small, ~300M), and **decoder-only** (BLOOMZ-560M, ~560M) — on two core Amharic NLP benchmarks: **three-class sentiment classification** (~9,480 social-media texts from AfriSenti) and **abstractive summarization** (500 BBC Amharic news article–summary pairs from XL-Sum, evaluated against human references). All models are fine-tuned under identical conditions using **LoRA** (rank $r = 8$, scaling $\alpha = 16$) to restrict trainable parameters to $<0.6\%$ of the total. 
+All models are fine-tuned under consistent experimental conditions using Low-Rank Adaptation (LoRA), with rank \(r=8\) and scaling factor \(\alpha=16\), keeping trainable parameters below 0.6% of the total. Evaluation covers task performance (Accuracy, Macro-F1, ROUGE-1/2/L, sacreBLEU, and BERTScore), computational efficiency (latency, peak VRAM, GPU energy measured through NVML board-level power sampling, and carbon emissions estimated using CodeCarbon), model calibration (Expected Calibration Error across 15 bins), and bias (positional sensitivity, counterfactual gender and profession perturbations with approximately 30% data expansion, and cultural group disparities).
 
-We evaluate not only task performance (Accuracy, Macro-F1, ROUGE-1/2/L, sacreBLEU, BERTScore) but also **efficiency** (latency, peak VRAM, GPU energy via NVML board-level power sampling, and CodeCarbon carbon estimation), **model calibration** (Expected Calibration Error across 15 bins), **bias** (positional sensitivity, counterfactual gender/profession perturbations with ~30% expansion, and cultural group disparities), and **statistical significance** (McNemar tests, paired bootstrap tests with $B=1000$ resamples, Wilcoxon signed-rank tests, and Holm–Bonferroni family-wise error adjustments). We further analyze three progressive bias-mitigation interventions — parameter-level (LoRA), data-level (counterfactual data augmentation), and loss-level (token reweighting) — reporting pre- and post-mitigation metrics. All source code, configs, notebooks, raw predictions, and visualization scripts are provided for end-to-end reproducibility.
+Statistical significance is assessed using McNemar's tests, paired bootstrap tests with 1,000 resamples, Wilcoxon signed-rank tests, and Holm-Bonferroni corrections for family-wise error control. We further investigate three bias-mitigation interventions: parameter-level adaptation through LoRA, data-level counterfactual augmentation, and loss-level token reweighting. We report pre- and post-mitigation metrics to assess their effects on model performance and bias.
+
+For end-to-end reproducibility, we provide the source code, configuration files, notebooks, raw predictions, and visualization scripts.
 
 ---
 
